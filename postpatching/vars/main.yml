@@ -1,6 +1,6 @@
 ---
-#tempdir: /var/tmp/ansible-{{ansible_date_time.epoch}}
-tempdir: /var/tmp/ansible-data
+tempdir: /var/tmp/ansible-{{ansible_date_time.epoch}}
+#tempdir: /var/tmp/ansible-data
 stage: post 
 files:
 #only filname is considerd from here.  command and ignore varaible need to coded.

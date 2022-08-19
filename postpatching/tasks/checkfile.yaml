@@ -1,5 +1,35 @@
 ---
-- name: Print file name of the pre task {{ item.command }} 
-  ansible.builtin.debug:
-    var: item 
-    verbosity: 2
+#- name: Print file name of the pre task {{ tempdir }}.{{ item.name}}.{{ stage }}
+#- name: Print file name of the pre task {{ tempdir }}
+ # debug:
+  #  msg: "file name is {{ tempdir }}/{{ item.filename }}"
+
+- name: Get cksum of my Pre file
+  stat:
+    path : "{{ tempdir }}/{{ item.filename }}.pre"
+  register: prefile
+
+- name: Get cksum of my Post file
+  stat:
+    path : "{{ tempdir }}/{{ item.filename }}.post"
+  register: postfile
+
+
+#- name: Pre SHA1 of {{  item.filename  }}
+#  set_fact:
+#    presha1: "{{ prefile.stat.checksum }}"
+
+#- name: Post SHA1 of {{  item.filename  }}
+#  set_fact:
+#    postha1: "{{ postfile.stat.checksum }}"
+
+#- name: Print file name of the pre task {{ tempdir }}
+ # debug:
+  #  msg: "filechecksum are {{ postha1 }} {{ presha1  }}"
+
+
+- name: Comparing  post and pre patching files of {{ item.filename }} 
+  debug:
+    msg: "File Compare {{ item.filename }} on {{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}"
+  failed_when:   postfile.stat.checksum !=  prefile.stat.checksum 
+  ignore_errors: True
