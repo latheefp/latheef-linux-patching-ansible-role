@@ -1,0 +1,47 @@
+---
+- hosts: all
+  tasks:
+    - name: Patching servers
+      yum:
+        name: '*'
+        state: latest
+        #exclude: java*
+        update_cache: true
+      environment:     
+        no_proxy: prod.mobily.lan  
+
+    - name: Install the latest version of Yum utils for needs-restarting command if not exists.
+      ansible.builtin.yum:
+       name: yum-utils
+       state: latest
+
+    - name: check to see if we need a reboot
+      command: needs-restarting -r
+      register: result
+      ignore_errors: yes
+
+    - name: display result
+      debug:
+        var: result.rc
+
+    - name: Reboot Server if Necessary
+      command: shutdown -r now "Ansible Updates Triggered"
+      become: true
+      async: 30
+      poll: 0
+      when: result.rc == 1
+      notify:
+      - Wait for Reboot
+
+
+  handlers:
+
+    - name: Wait for Reboot
+      local_action:
+        module: wait_for
+          host={{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}
+          port=22
+          search_regex=OpenSSH
+          delay=15
+          timeout=300
+          state=started

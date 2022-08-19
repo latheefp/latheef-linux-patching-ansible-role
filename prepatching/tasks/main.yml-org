@@ -1,0 +1,4 @@
+---
+- name: Prepatching tasks 
+  ansible.builtin.import_tasks: datacollection.yaml
+  tags: [lp_vars, always]

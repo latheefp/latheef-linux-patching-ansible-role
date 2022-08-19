@@ -1,0 +1,4 @@
+---
+- name: deploy files with network address in them
+  include_tasks: checkfile.yaml
+  loop: "{{ files }}"

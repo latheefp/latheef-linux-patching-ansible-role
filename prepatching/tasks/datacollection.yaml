@@ -1,0 +1,120 @@
+---
+- name: debugvar 
+  ansible.builtin.debug:
+   var:  tempdir 
+
+- name: Creates directory to store artificats
+  file:
+    path: '{{ tempdir }}'
+    state: directory
+
+- name: Getting ip link show  output 
+  shell:   df -h|awk '{print $1 " " $6}' >/{{ tempdir }}/df-h.'{{ stage }}'
+
+- name: Getting df -h output
+  shell:   ip link show >/{{ tempdir }}/iplink.'{{ stage }}'
+
+- name: Getting hostname 
+  shell:   hostname >/{{ tempdir }}/hostname.{{ stage }}
+
+- name: Getting OS Release 
+  shell:  cat  /etc/redhat-release >/{{ tempdir }}/redhat-release.'{{ stage }}'
+
+- name: Current user info 
+  shell:   who >/{{ tempdir }}/who.'{{ stage }}'
+
+
+- name: Last command out 
+  shell:   last|head >/{{ tempdir }}/last.'{{ stage }}'
+
+- name:  Failed service list 
+  shell:  systemctl list-units --state failed>/{{ tempdir }}/failed-systemd.'{{ stage }}'
+
+- name:  Enabled service list 
+  shell:  systemctl list-units --state  active>/{{ tempdir }}/active-systemd.'{{ stage }}'
+
+- name: IBM WebphereMQ
+  shell:   ps -ef|grep -i mqm >/{{ tempdir }}/mq.'{{ stage }}'
+
+- name: Oracle DB info
+  shell:   ps -ef | grep -i pmon >/{{ tempdir }}/oracle.'{{ stage }}'
+
+- name: /etc/hosts file 
+  shell:   cat /etc/hosts >/{{ tempdir }}/hosts.'{{ stage }}'
+
+
+- name: mount output 
+  shell:   mount  >/{{ tempdir }}/mount.'{{ stage }}'
+
+- name:  netstat listening ports
+  shell:  netstat -lntp  >/{{ tempdir }}/netstat-lntp.'{{ stage }}'
+
+- name:  netstat -ni
+  shell:  netstat -ni  >/{{ tempdir }}/netstat-ni.'{{ stage }}'
+
+- name:  netstat -nr
+  shell:  netstat -nr  >/{{ tempdir }}/netstat-nr.'{{ stage }}'
+
+- name: ip link show 
+  shell:  ip link show   >/{{ tempdir }}/ip-link-show.'{{ stage }}'
+
+- name: ip route  show 
+  shell:  ip route  show   >/{{ tempdir }}/ip-route-show.'{{ stage }}'
+
+
+- name: Root crontab 
+  shell:  crontab -l   >/{{ tempdir }}/rootcron.'{{ stage }}'
+  ignore_errors: True
+
+- name: java version 
+  shell:  java -version   >/{{ tempdir }}/java.'{{ stage }}'
+  ignore_errors: True
+
+
+
+- name: rpm list
+  shell:  rpm -qa   >/{{ tempdir }}/rpm.'{{ stage }}'
+
+- name: Yum history 
+  shell:  yum history  >/{{ tempdir }}/yum_history.'{{ stage }}'
+
+
+
+
+- name: PVs
+  shell:  pvs   >/{{ tempdir }}/pvc.'{{ stage }}'
+
+- name: VGs 
+  shell:  vgs   >/{{ tempdir }}/vgs.'{{ stage }}'
+
+- name: LVs 
+  shell:  lvs   >/{{ tempdir }}/lvs.'{{ stage }}'
+
+
+
+- name: Backup all files
+  ansible.builtin.copy:
+      src: "{{ item.path }}/{{ item.fname }}"
+      dest: "{{ tempdir }}/{{ item.fname }}.{{ stage }}"
+  loop:
+      - { path: '/etc', fname: 'resolv.conf' }
+      - { path: '/etc', fname: 'fstab' }
+      - { path: '/etc', fname: 'hosts' }
+      - { path: '/etc', fname: 'passwd' }
+      - { path: '/etc', fname: 'shadow' }
+      - { path: '/etc', fname: 'group' }
+      - { path: '/etc/sendmail', fname: 'sendmail.cf' }
+  ignore_errors: True
+
+
+#- name: Registry contend in file 
+#  command: cat /tmp/df-h.'{{ stage }}'
+#  register: filename
+
+#- name: Print df -h output
+#  debug:
+#   msg: "{{filename.stdout}}"
+
+#- name: date and time
+#  ansible.builtin.debug:
+#   var: ansible_date_time.epoch

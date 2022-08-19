@@ -1,0 +1,5 @@
+---
+- name: Print file name of the pre task {{ item.command }} 
+  ansible.builtin.debug:
+    var: item 
+    verbosity: 2

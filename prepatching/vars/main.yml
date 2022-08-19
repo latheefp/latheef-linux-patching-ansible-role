@@ -1,0 +1,3 @@
+---
+tempdir: /var/tmp/ansible-{{ansible_date_time.epoch}}
+stage: pre

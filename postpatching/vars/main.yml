@@ -1,0 +1,35 @@
+---
+#tempdir: /var/tmp/ansible-{{ansible_date_time.epoch}}
+tempdir: /var/tmp/ansible-data
+stage: post 
+files:
+#only filname is considerd from here.  command and ignore varaible need to coded.
+  - { filename: 'active-systemd', command: '', ingore: 'no' }
+  - { filename: 'df-h',           command: '', 'no' }
+  - { filename: 'failed-systemd', command: '', ingore: 'no' }
+  - { filename: 'fstab',          command: '', ingore: 'no' }
+  - { filename: 'group',          command: '', ingore: 'no' }
+  - { filename: 'hostname',       command: '', ingore: 'no' }
+  - { filename: 'hosts',          command: '', ingore: 'no' }
+  - { filename: 'iplink',         command: '', ingore: 'no' }
+  - { filename: 'ip-link-show',   command: '', ingore: 'no' }
+  - { filename: 'ip-route-show',  command: '', ingore: 'no' }
+  - { filename: 'java',           command: '', ingore: 'no' }
+  - { filename: 'last',           command: '', ingore: 'no' }
+  - { filename: 'lvs',            command: '', ingore: 'no' }
+  - { filename: 'mount',          command: '', ingore: 'no' }
+  - { filename: 'mq',             command: '', ingore: 'no' }
+  - { filename: 'netstat-lntp',   command: '', ingore: 'no' }
+  - { filename: 'netstat-ni',     command: '', ingore: 'no' }
+  - { filename: 'netstat-nr',     command: '', ingore: 'no' }
+  - { filename: 'oracle',         command: '', ingore: 'no' }
+  - { filename: 'passwd',         command: '', ingore: 'no' }
+  - { filename: 'pvc',            command: '', ingore: 'no' }
+  - { filename: 'redhat-release', command: '', ingore: 'no' }
+  - { filename: 'resolv',         command: '', ingore: 'no' }
+  - { filename: 'rootcron',       command: '', ingore: 'no' }
+  - { filename: 'rpm',            command: '', ingore: 'no' }
+  - { filename: 'shadow',         command: '', ingore: 'no' }
+  - { filename: 'vgs',            command: '', ingore: 'no' }
+  - { filename: 'who',            command: '', ingore: 'no' }
+  - { filename: 'yum_history',    command: '', ingore: 'no' } 

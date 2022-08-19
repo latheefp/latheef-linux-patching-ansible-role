@@ -1,0 +1,11 @@
+---
+# handleddrs file for linxupatching
+- name: Wait for Reboot
+  local_action: 
+    module: wait_for  
+     host={{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}  
+     port=22  
+     search_regex=OpenSSH
+     delay=15
+     timeout=300
+     state=started
